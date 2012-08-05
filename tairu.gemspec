@@ -13,6 +13,8 @@ Gem::Specification.new do |gem|
   gem.email = ['scooterwadsworth@gmail.com']
   gem.homepage = 'https://github.com/scooterw/tairu'
 
-  gem.files = Dir['README.md', 'lib/**/*']
+  gem.files = Dir['README.md', 'bin/**/*', 'lib/**/*']
   gem.require_paths = ['lib']
+  gem.bindir = 'bin'
+  gem.executables = ['tairu']
 end
