@@ -1,13 +1,15 @@
-# i took most of this from:
-# https://github.com/migurski/TileStache/blob/master/TileStache/MBTiles.py
+# see https://github.com/migurski/TileStache/blob/master/TileStache/MBTiles.py for original
 
 module Tairu
   module Store
     class MBTiles
+      # NEED TO MAKE THIS CONFIGURABLE
+      TILESETS_DIR = File.join(File.dirname(__FILE__), '..', '..', 'tilesets')
+
       if defined? JRUBY_VERSION
-        CONNECTION_STRING = 'jdbc:sqlite:tilesets/'
+        CONNECTION_STRING = "jdbc:sqlite:#{TILESETS_DIR}/"
       else
-        CONNECTION_STRING = 'sqlite://tilesets/'
+        CONNECTION_STRING = "sqlite://#{TILESETS_DIR}/"
       end
 
       def self.create_tileset(file, name, type, version, description, format, bounds = nil)
@@ -59,7 +61,6 @@ module Tairu
       #def self.list_tiles(file);end
 
       def self.get_tile(file, coord)
-        puts CONNECTION_STRING + file
         tile_db = Sequel.connect(CONNECTION_STRING + file)
 
         formats = {
@@ -68,11 +69,7 @@ module Tairu
         }
 
         format = tile_db["SELECT value FROM metadata WHERE name='format'"]
-        # this default value is for a test data set with bad metadata
-        # there really shouldn't be a default here
         mime_type = format.first.nil? ? formats['png'] : formats[format.first[:value]]
-
-        #MBTiles.get_tile 'schenectady.mbtiles', {zoom: 13, row: 5175, col: 2414}
 
         tile_row = (2 ** coord[:zoom] - 1) - coord[:row]
         query = "SELECT tile_data FROM tiles WHERE zoom_level=? AND tile_column=? AND tile_row=?"

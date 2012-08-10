@@ -2,6 +2,7 @@ source :rubygems
 
 gem 'sequel'
 gem 'sinatra'
+gem 'puma'
 
 platform :jruby do
   gem 'jdbc-sqlite3'

@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'rack'
+require 'puma'
+require 'puma/server'
+
+# TODO: parse ARGV for config options
+
+app, options = Rack::Builder.parse_file '../config.ru'
+
+server = ::Puma::Server.new(app)
+host, port = '0.0.0.0', 8080
+server.add_tcp_listener host, port
+min_threads, max_threads = 0, 16
+server.min_threads = min_threads
+server.max_threads = max_threads
+
+puts "Starting server on http://#{host}:#{port}"
+puts "Min Threads: #{min_threads} / Max Threads: #{max_threads}"
+
+begin
+  server.run.join
+rescue Interrupt
+  server.stop(true)
+end
