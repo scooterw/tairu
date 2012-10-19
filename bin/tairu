@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require 'rack'
 require 'puma'
 require 'puma/server'
 
-# TODO: parse ARGV for config options
-
-app, options = Rack::Builder.parse_file '../config.ru'
+app, options = Rack::Builder.parse_file File.join(File.expand_path(File.dirname(__FILE__)), '..', 'config.ru')
 
 server = ::Puma::Server.new(app)
 host, port = '0.0.0.0', 8080

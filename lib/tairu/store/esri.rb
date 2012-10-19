@@ -10,12 +10,19 @@
 module Tairu
   module Store
     class Esri
+      def self.decode_hex(hex_value)
+        Integer("0x#{hex_value}")
+      end
+
+      def self.encode_hex(int_value, length = 8)
+        length = "%02i" % length
+        "%#{length}x" % int_value
+      end
+
       def self.get_tile(tileset, coord, format = 'jpg')
-        # *.size != 8?
-        row = coord[:row].kind_of?(String) && coord[:row].size == 8 ? coord[:row] : "%08x" % coord[:row]
-        col = coord[:col].kind_of?(String) && coord[:col].size == 8 ? coord[:col] : "%08x" % coord[:col]
-        tile = File.join(tileset, "L#{coord[:zoom]}", "R#{row}", "C#{col}.#{format}")
+        tile = File.read(File.join(File.dirname(__FILE__), '..', '..', 'tilesets', tileset, 'Layers', '_alllayers', "L#{coord[:zoom]}", "R#{encode_hex(coord[:row])}", "C#{encode_hex(coord[:col])}.#{format}"))
         mime_type = "image/#{format}"
+        {mime_type: mime_type, tile: tile}
       end
     end
   end
