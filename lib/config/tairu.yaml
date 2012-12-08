@@ -1,0 +1,9 @@
+cache:
+  name: tairu_demo
+  layers:
+    geo:
+      provider: mbtiles
+      tileset: geo.mbtiles
+    rhode_island:
+      provider: mbtiles
+      tileset: rhodeisland.mbtiles
