@@ -5,11 +5,30 @@ require 'rack'
 require 'puma'
 require 'puma/server'
 
-app, options = Rack::Builder.parse_file File.join(File.expand_path(File.dirname(__FILE__)), '..', 'config.ru')
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: tairu.rb [options]'
+
+  opts.on('-p', '--port PORT', '') do |port|
+    options[:port] = port
+  end
+
+  opts.on('-h', '--host HOST', '') do |host|
+    options[:host] = host
+  end
+
+  opts.on('-c', '--config CONFIG', '') do |config|
+    options[:config] = config
+  end
+end.parse!
+
+app = Rack::Builder.parse_file File.join(File.expand_path(File.dirname(__FILE__)), '..', 'config.ru')
 
 server = ::Puma::Server.new(app)
-host, port = '0.0.0.0', 8080
-server.add_tcp_listener host, port
+host = options[:host] || '0.0.0.0'
+port = options[:port] || 8080
+server.add_tcp_listener(host, port)
 min_threads, max_threads = 0, 16
 server.min_threads = min_threads
 server.max_threads = max_threads
