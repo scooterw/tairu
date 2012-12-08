@@ -20,9 +20,9 @@ module Tairu
       end
 
       def self.get(tileset, coord, format = 'jpg')
-        tile = File.read(File.join(File.dirname(__FILE__), '..', '..', 'tilesets', tileset, 'Layers', '_alllayers', "L#{coord[:zoom]}", "R#{encode_hex(coord[:row])}", "C#{encode_hex(coord[:col])}.#{format}"))
+        data = File.read(File.join(File.dirname(__FILE__), '..', '..', 'tilesets', tileset, 'Layers', '_alllayers', "L#{coord[:zoom]}", "R#{encode_hex(coord[:row])}", "C#{encode_hex(coord[:col])}.#{format}"))
         mime_type = "image/#{format}"
-        Tairu::Tile.new(tile, mime_type)
+        Tairu::Tile.new(data, mime_type)
       end
     end
   end

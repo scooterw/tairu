@@ -1,9 +1,9 @@
 module Tairu
   class Tile
-    attr_accessor :tile, :mime_type
+    attr_accessor :data, :mime_type
 
-    def initialize(tile, mime_type)
-      @tile = tile
+    def initialize(data, mime_type)
+      @data = data
       @mime_type = mime_type
     end
   end
