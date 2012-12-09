@@ -4,7 +4,7 @@ module Tairu
   class Configuration
     attr_accessor :data, :cache
 
-    def initialize(config = nil) # = File.join(File.expand_path(File.dirname(__FILE__)), '../config/tairu.yaml'))
+    def initialize(config = nil)
       raise "No config file specified." unless config
       @data = YAML.load_file(config)
       @cache = start_cache

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bin/tairu -c ~/code/ruby/libs/tairu/examples/mbtiles_utfgrid/example.yaml
