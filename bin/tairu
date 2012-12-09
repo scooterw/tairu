@@ -10,6 +10,10 @@ opts = {}
 OptionParser.new do |o|
   o.banner = 'Usage: tairu.rb [options]'
 
+  o.on('-c', '--config CONFIG', '') do |config|
+    opts[:config] = config
+  end
+
   o.on('-p', '--port PORT', '') do |port|
     opts[:port] = port
   end
@@ -17,11 +21,19 @@ OptionParser.new do |o|
   o.on('-h', '--host HOST', '') do |host|
     opts[:host] = host
   end
-
-  o.on('-c', '--config CONFIG', '') do |config|
-    opts[:config] = config
-  end
 end.parse!
+
+if opts[:config]
+  unless defined?(Tairu)
+    require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu')
+  end
+
+  Tairu::CONFIG = Tairu::Configuration.new(opts[:config])
+  Tairu::CACHE = Tairu::CONFIG.cache
+else
+  puts "No valid config file specified. Use -c / --config option."
+  exit(1)
+end
 
 app, options = Rack::Builder.parse_file File.join(File.expand_path(File.dirname(__FILE__)), '..', 'config.ru')
 

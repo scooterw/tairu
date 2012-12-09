@@ -1,17 +1,27 @@
+require 'json'
+require 'zlib'
+
 module Tairu
   module Store
     class MBTiles
-      TILESETS_DIR = File.join(File.dirname(__FILE__), '..', '..', 'tilesets')
-      CONN = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{TILESETS_DIR}/" : "sqlite://#{TILESETS_DIR}/"
+      #TILESETS_DIR = File.join(File.dirname(__FILE__), '..', '..', 'tilesets')
+      #CONN = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{TILESETS_DIR}/" : "sqlite://#{TILESETS_DIR}/"
 
       def initialize;end
 
-      def self.create(file, name, type, version, description, format, bounds = nil)
+      def self.connection_string(layer)
+        loc = Tairu::CONFIG.data['cache']['layers'][layer]['location']
+        conn = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{loc}" : "sqlite://#{loc}"
+        conn
+      end
+
+      def self.create(layer, file, name, type, version, description, format, bounds = nil)
         unless %w{png jpg}.index format
           raise "Format {#{format}} not supported. Must be 'png' or 'jpg' per MBTiles 1.1 spec."
         end
 
-        db = Sequel.connect(CONN + file)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
         unless db.table_exists?(:metadata)
           db.create_table :metadata do
@@ -42,22 +52,30 @@ module Tairu
         md.insert(name: 'description', value: description)
         md.insert(name: 'format', value: format)
         md.insert(name: 'bounds', value: bounds) unless bounds.nil?
+
+        db.disconnect
       end
 
-      def self.exists?(file)
-        db = Sequel.connect(CONN + file)
+      def self.exists?(layer, file)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
         tv = db.tables + db.views
 
         [:metadata, :tiles].each {|s| return false unless tv.index(s)}
 
-        db[:metadata].first.nil? && db[:tiles].first.nil?
+        exists = db[:metadata].first.nil? && db[:tiles].first.nil?
+
+        db.disconnect
+
+        exists
       end
 
-      def self.info(file)
+      def self.info(layer, file)
         raise "Tileset does not exist." unless exists? file
 
-        db = Sequel.connect(CONN + file)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
         info = {}
 
@@ -66,11 +84,14 @@ module Tairu
           info[key] = value[:value] unless value.nil?
         end
 
+        db.disconnect
+
         info
       end
 
-      def self.list(file)
-        db = Sequel.connect(CONN + file)
+      def self.list(layer, file)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
         tiles = db[:tiles]
 
@@ -80,11 +101,14 @@ module Tairu
           list << [((2 ** tile[:zoom_level] - 1) - tile[:tile_row]), tile[:tile_column], tile[:zoom_level]]
         end
 
+        db.disconnect
+
         list
       end
 
-      def self.get(file, coord)
-        db = Sequel.connect(CONN + file)
+      def self.get(layer, file, coord)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
         formats = {
           'png' => 'image/png',
@@ -99,12 +123,48 @@ module Tairu
 
         tile_data = tile.first.nil? ? nil : Tairu::Tile.new(tile.first[:tile_data], mime_type)
 
+        db.disconnect
+
         tile_data
       end
 
-      def self.remove(file, coord);end
+      def self.get_grid(layer, file, coord)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
 
-      def self.add(file, coord, tile_data);end
+        tile_row = (2 ** coord.zoom - 1) - coord.row
+        grid = db[:grids].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
+        
+        zstream = Zlib::Inflate.new
+        buf = zstream.inflate(grid.first[:grid])
+        zstream.finish
+        zstream.close
+
+        utf_grid = JSON.parse(buf)
+        utf_grid[:data] = {}
+
+        grid_data = db[:grid_data].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
+        
+        grid_data.each do |gd|
+          utf_grid[:data][gd[:key_name]] = JSON.parse(gd[:key_json])
+        end
+
+        db.disconnect
+
+        utf_grid
+      end
+
+      def self.remove(layer, file, coord)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
+        db.disconnect
+      end
+
+      def self.add(layer, file, coord, tile_data)
+        conn = connection_string(layer)
+        db = Sequel.connect(File.join(conn, file))
+        db.disconnect
+      end
     end
   end
 end
