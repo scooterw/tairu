@@ -4,10 +4,15 @@ require 'zlib'
 module Tairu
   module Store
     class MBTiles
-      #TILESETS_DIR = File.join(File.dirname(__FILE__), '..', '..', 'tilesets')
-      #CONN = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{TILESETS_DIR}/" : "sqlite://#{TILESETS_DIR}/"
-
       def initialize;end
+
+      def self.inflate(str)
+        zstream = Zlib::Inflate.new
+        buf = zstream.inflate(str)
+        zstream.finish
+        zstream.close
+        buf
+      end
 
       def self.connection_string(layer)
         loc = Tairu::CONFIG.data['cache']['layers'][layer]['location']
@@ -134,13 +139,10 @@ module Tairu
 
         tile_row = (2 ** coord.zoom - 1) - coord.row
         grid = db[:grids].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
-        
-        zstream = Zlib::Inflate.new
-        buf = zstream.inflate(grid.first[:grid])
-        zstream.finish
-        zstream.close
 
-        utf_grid = JSON.parse(buf)
+        grid_buf = inflate(grid.first[:grid])
+
+        utf_grid = JSON.parse(grid_buf)
         utf_grid[:data] = {}
 
         grid_data = db[:grid_data].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
