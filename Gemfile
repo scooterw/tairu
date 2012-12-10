@@ -1,14 +1,10 @@
 source :rubygems
+gemspec
 
-gem 'rake'
-gem 'sequel'
-gem 'sinatra'
-gem 'puma'
+#platform :jruby do
+#  gem 'jdbc-sqlite3'
+#end
 
-platform :jruby do
-  gem 'jdbc-sqlite3'
-end
-
-platform :ruby do
-  gem 'sqlite3'
-end
+#platform :ruby do
+#  gem 'sqlite3'
+#end
