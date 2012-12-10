@@ -24,7 +24,9 @@ OptionParser.new do |o|
 end.parse!
 
 if opts[:config]
-  require 'tairu'
+  unless defined?(Tairu)
+    require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu')
+  end
 
   Tairu::CONFIG = Tairu::Configuration.new(opts[:config])
   Tairu::CACHE = Tairu::CONFIG.cache

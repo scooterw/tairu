@@ -1,0 +1,8 @@
+cache:
+  name: esri_demo
+  type: memory
+  layers:
+    waldo:
+      provider: esri
+      tileset: waldo_canyon
+      location: ~/.tairu/tilesets

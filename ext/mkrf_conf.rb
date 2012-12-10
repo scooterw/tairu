@@ -18,3 +18,9 @@ begin
 rescue
   exit(1)
 end
+
+p File.expand_path(__FILE__)
+
+f = File.open(File.join(File.expand_path(File.dirname(__FILE__)), 'Rakefile'), 'w')
+f.write("task :default\n")
+f.close

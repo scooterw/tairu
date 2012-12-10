@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.name = 'tairu'
   gem.version = Tairu::VERSION
   gem.platform = Gem::Platform::RUBY
-  #gem.extensions = Dir['ext/**/*']
+  gem.extensions = Dir['ext/**/*']
   gem.description = 'Simple Tile Server for Ruby'
   gem.summary = 'Simple Tile Server for Ruby'
   gem.licenses = ['MIT']
@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.2'
   gem.required_rubygems_version = '>= 1.3.6'
 
-  gem.files = Dir['README.md', 'bin/**/*', 'lib/**/*']
+  gem.files = Dir['README.md', 'config.ru', 'bin/**/*', 'lib/**/*']
   gem.require_paths = ['lib']
   gem.bindir = 'bin'
   gem.executables = ['tairu']
