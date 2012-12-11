@@ -10,6 +10,12 @@ opts = {}
 OptionParser.new do |o|
   o.banner = 'Usage: tairu.rb [options]'
 
+  o.on('-v', '--version', '') do
+    require 'tairu'
+    puts "Tairu v#{Tairu::VERSION}"
+    exit(0)
+  end
+
   o.on('-c', '--config CONFIG', '') do |config|
     opts[:config] = File.expand_path(config)
   end

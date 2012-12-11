@@ -1,6 +1,9 @@
 name: esri_demo
 cache:
-  type: memory
+  type: disk
+  options:
+    path: ~/.tairu/caches
+    expire: 300
 layers:
   waldo:
     provider: esri

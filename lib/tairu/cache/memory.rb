@@ -9,7 +9,7 @@ module Tairu
         key = Tairu::Cache::Key.new(layer, coord)
         expire = Time.now + age
         @tiles[key] = {tile: tile, expire: expire}
-        :purge_expired_tiles
+        :purge_expired
       end
 
       def get(layer, coord) # format?
