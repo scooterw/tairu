@@ -4,11 +4,12 @@ require File.join(File.dirname(__FILE__), '..', 'tairu')
 module Tairu
   class Server < Sinatra::Base
     get '/:tileset/:zoom/:col/:row.grid.json' do
-      status 404 if Tairu::CONFIG.layers['provider'].nil?
+      tileset = Tairu.config.layers[params[:tileset]]
       
-      if Tairu::CONFIG.layers['provider'] == 'mbtiles'
+      status 404 if tileset.nil?
+      
+      if tileset['provider'] == 'mbtiles'
         coord = Tairu::Coordinate.new(Integer(params[:row]), Integer(params[:col]), Integer(params[:zoom]))
-        tileset = Tairu::CONFIG.layers[params[:tileset]]
         tile = Tairu::Store::MBTiles.get_grid(params[:tileset], tileset['tileset'], coord)
 
         callback = params.delete('callback')

@@ -11,7 +11,7 @@ module Tairu
       end
 
       def self.get(layer, tileset, coord, format = 'png')
-        loc = File.expand_path(Tairu::CONFIG.layers[layer]['location'])
+        loc = File.expand_path(Tairu.config.layers[layer]['location'])
         path = File.join(loc, tileset, 'Layers', '_alllayers', "L#{'%02i' % coord.zoom}", "R#{encode_hex(coord.row)}", "C#{encode_hex(coord.column)}.#{format}")
 
         return nil unless File.exists?(path)

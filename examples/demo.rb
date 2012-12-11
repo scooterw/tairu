@@ -28,8 +28,8 @@ if opts[:config]
     require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu')
   end
 
-  Tairu::CONFIG = Tairu::Configuration.config_from_file(opts[:config])
-  Tairu::CACHE = Tairu::CONFIG.cache
+  Tairu.config = Tairu::Configuration.config_from_file(opts[:config])
+  Tairu.cache = Tairu.config.cache
 else
   puts "No valid config file specified. Use -c / --config option."
   exit(1)

@@ -15,7 +15,7 @@ module Tairu
       end
 
       def self.connection_string(layer)
-        loc = File.expand_path(Tairu::CONFIG.layers[layer]['location'])
+        loc = File.expand_path(Tairu.config.layers[layer]['location'])
         conn = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{loc}" : "sqlite://#{loc}"
         conn
       end
@@ -77,7 +77,7 @@ module Tairu
       end
 
       def self.info(layer, file)
-        file_loc = File.join(File.expand_path(Tairu::CONFIG.layers[layer]['location']), file)
+        file_loc = File.join(File.expand_path(Tairu.config.layers[layer]['location']), file)
         raise "Tileset does not exist." unless exists? file_loc
 
         conn = connection_string(layer)
