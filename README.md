@@ -18,6 +18,8 @@ layers:
     location: ~/.tairu/tilesets
     format: png
 
+```
+
 Tairu relies on a valid configuration object assigned to `Tairu::CONFIG`
 
 This may be read from a yaml file (see example above) using `Tairu::Configuration.config_from_file(file_name)`
@@ -40,3 +42,5 @@ cache = Tairu::Configuration.start_cache('memory', {})
 name = 'tairu_config_example'
 
 Tairu::CONFIG = Tairu::Configuration.new(layers, cache, name)
+
+```
