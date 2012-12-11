@@ -16,14 +16,12 @@ module Tairu
 
         return nil unless File.exists?(path)
 
-        if File.exists?(path)
-          data = File.open(path, 'r') do |f|
-            begin
-              f.flock(File::LOCK_SH)
-              f.read
-            ensure
-              f.flock(File::LOCK_UN)
-            end
+        data = File.open(path, 'r') do |f|
+          begin
+            f.flock(File::LOCK_SH)
+            f.read
+          ensure
+            f.flock(File::LOCK_UN)
           end
         end
 
