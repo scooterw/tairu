@@ -28,7 +28,7 @@ if opts[:config]
     require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu')
   end
 
-  Tairu::CONFIG = Tairu::Configuration.new(opts[:config])
+  Tairu::CONFIG = Tairu::Configuration.config_from_file(opts[:config])
   Tairu::CACHE = Tairu::CONFIG.cache
 else
   puts "No valid config file specified. Use -c / --config option."

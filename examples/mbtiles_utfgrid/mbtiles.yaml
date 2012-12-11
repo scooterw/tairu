@@ -1,8 +1,9 @@
+name: mbtiles_utfgrid_demo
 cache:
-  name: mbtiles_utfgrid_demo
   type: memory
-  layers:
-    geo:
-      provider: mbtiles
-      tileset: geography-class.mbtiles
-      location: ~/.tairu/tilesets
+layers:
+  geo:
+    provider: mbtiles
+    tileset: geography-class.mbtiles
+    location: ~/.tairu/tilesets
+    format: 'png'

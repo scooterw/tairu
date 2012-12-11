@@ -8,11 +8,35 @@ Example config file:
 
 ```ruby
 
+name: tairu_config_example
 cache:
-  name: tairu_config_example
   type: memory
-  layers:
-    geo:
-      provider: mbtiles
-      tileset: geography-class.mbtiles
-      location: ~/.tairu/tilesets
+layers:
+  geo:
+    provider: mbtiles
+    tileset: geography-class.mbtiles
+    location: ~/.tairu/tilesets
+    format: png
+
+Tairu relies on a valid configuration object assigned to `Tairu::CONFIG`
+
+This may be read from a yaml file (see example above) using `Tairu::Configuration.config_from_file(file_name)`
+
+or by assigning default values for layers, cache, and name (optional):
+
+```ruby
+
+layers = {
+  'geo' => {
+    'provider' => 'mbtiles',
+    'tileset' => 'geography-class.mbtiles',
+    'location' => '~/.tairu/tilesets',
+    'format' => 'png'
+  }
+}
+
+cache = Tairu::Configuration.start_cache('memory', {})
+
+name = 'tairu_config_example'
+
+Tairu::CONFIG = Tairu::Configuration.new(layers, cache, name)

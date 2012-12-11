@@ -1,8 +1,9 @@
+name: esri_demo
 cache:
-  name: esri_demo
   type: memory
-  layers:
-    waldo:
-      provider: esri
-      tileset: waldo_canyon
-      location: ~/.tairu/tilesets
+layers:
+  waldo:
+    provider: esri
+    tileset: waldo_canyon
+    location: ~/.tairu/tilesets
+    format: 'png'

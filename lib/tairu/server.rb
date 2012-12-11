@@ -5,7 +5,7 @@ module Tairu
   class Server < Sinatra::Base
     get '/:tileset/:zoom/:row/:col.grid.json' do
       coord = Tairu::Coordinate.new(Integer(params[:row]), Integer(params[:col]), Integer(params[:zoom]))
-      tileset = Tairu::CONFIG.data['cache']['layers'][params[:tileset]]
+      tileset = Tairu::CONFIG.layers[params[:tileset]]
       tile = Tairu::Store::MBTiles.get_grid(params[:tileset], tileset['tileset'], coord)
 
       callback = params.delete('callback')

@@ -11,14 +11,14 @@ module Tairu
   TILE_404 = Tairu::Tile.new(File.read(File.join(File.expand_path(File.dirname(__FILE__)), 'tairu', 'images', '404.png')), 'image/png')
 
   def self.get_tile(name, coord, format = nil)
-    tileset = Tairu::CONFIG.data['cache']['layers'][name]
+    tileset = Tairu::CONFIG.layers[name]
 
     unless tileset.nil?
       tile = Tairu::CACHE.get(tileset, coord)
 
       if tile.nil?
         provider = Tairu::Store::TYPES[tileset['provider']]
-        provider_tile = provider.get(name, tileset['tileset'], coord)
+        provider_tile = provider.get(name, tileset['tileset'], coord, tileset['format'])
 
         unless provider_tile.nil?
           tile = provider_tile
