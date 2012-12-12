@@ -1,0 +1,9 @@
+name: esri_test
+cache:
+  type: memory
+layers:
+  waldo:
+    provider: esri
+    tileset: waldo_canyon
+    location: ./spec/data/tilesets
+    format: 'png'

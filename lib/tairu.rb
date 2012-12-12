@@ -10,7 +10,6 @@ require 'configuration'
 module Tairu
   extend self
 
-  #TILE_404 = Tairu::Tile.new(File.read(File.join(File.expand_path(File.dirname(__FILE__)), 'tairu', 'images', '404.png')), 'image/png')
   TILE_404 = Tairu::Tile.new('', 'image/png')
 
   class << self

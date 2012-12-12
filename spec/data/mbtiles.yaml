@@ -1,0 +1,9 @@
+name: mbtiles_test
+cache:
+  type: memory
+layers:
+  geo:
+    provider: mbtiles
+    tileset: geography-class.mbtiles
+    location: ./spec/data/tilesets
+    format: 'png'
