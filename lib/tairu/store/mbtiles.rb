@@ -4,7 +4,29 @@ require 'zlib'
 module Tairu
   module Store
     class MBTiles
-      def initialize;end
+      def initialize(layer)
+        tileset = File.join(File.expand_path(Tairu.config.layers[layer]['location']), Tairu.config.layers[layer]['tileset'])
+        conn = defined?(JRUBY_VERSION) ? "jdbc:sqlite:#{tileset}" : "sqlite://#{tileset}"
+        @db = Sequel.connect(conn, max_connections: 1)
+      end
+
+      def test
+        @db.table_exists?(:tiles)
+      end
+
+      def get(coord, format=nil)
+        formats = {
+          'png' => 'image/png',
+          'jpg' => 'image/jpg'
+        }
+
+        format = @db[:metadata].select(:value).where(name: 'format').first
+        mime_type = format.nil? ? formats['png'] : formats[format[:value]]
+        tile_row = (2 ** coord.zoom - 1) - coord.row
+        tile = @db[:tiles].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
+        tile_data = tile.first.nil? ? nil : Tairu::Tile.new(tile.first[:tile_data], mime_type)
+        tile_data
+      end
 
       def self.inflate(str)
         zstream = Zlib::Inflate.new
@@ -113,25 +135,24 @@ module Tairu
       end
 
       def self.get(layer, file, coord, format = nil)
-        conn = connection_string(layer)
-        db = Sequel.connect(File.join(conn, file))
-
         formats = {
           'png' => 'image/png',
           'jpg' => 'image/jpg'
         }
 
-        format = db[:metadata].select(:value).where(name: 'format').first
-        mime_type = format.nil? ? formats['png'] : formats[format[:value]]
+        Sequel.connect(File.join(connection_string(layer), file)) do |db|
+          format = db[:metadata].select(:value).where(name: 'format').first
+          mime_type = format.nil? ? formats['png'] : formats[format[:value]]
 
-        tile_row = (2 ** coord.zoom - 1) - coord.row
-        tile = db[:tiles].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
+          tile_row = (2 ** coord.zoom - 1) - coord.row
+          tile = db[:tiles].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
 
-        tile_data = tile.first.nil? ? nil : Tairu::Tile.new(tile.first[:tile_data], mime_type)
+          tile_data = tile.first.nil? ? nil : Tairu::Tile.new(tile.first[:tile_data], mime_type)
 
-        db.disconnect
+          db.disconnect
 
-        tile_data
+          tile_data
+        end
       end
 
       def self.get_grid(layer, file, coord)

@@ -6,10 +6,10 @@ Gem::Specification.new do |gem|
   gem.name = 'tairu'
   gem.version = Tairu::VERSION
   gem.platform = Gem::Platform::RUBY
-  gem.extensions = Dir['ext/**/*']
+  #gem.extensions = Dir['ext/**/*']
   gem.description = 'Simple Tile Server for Ruby'
   gem.summary = 'Simple Tile Server for Ruby'
-  gem.licenses = ['MIT']
+  gem.licenses = ['BSD']
 
   gem.authors = ['Scooter Wadsworth']
   gem.email = ['scooterwadsworth@gmail.com']

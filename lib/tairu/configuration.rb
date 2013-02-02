@@ -36,6 +36,8 @@ module Tairu
 
       cache = Tairu::Cache::Memory.new if cache.nil?
 
+      Tairu.cache = cache
+
       config = Configuration.new(layers, cache, name)
 
       config

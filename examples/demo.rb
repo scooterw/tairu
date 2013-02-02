@@ -28,8 +28,7 @@ if opts[:config]
     require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu')
   end
 
-  Tairu.config = Tairu::Configuration.config_from_file(opts[:config])
-  Tairu.cache = Tairu.config.cache
+  Tairu.config_from_file(opts[:config])
 else
   puts "No valid config file specified. Use -c / --config option."
   exit(1)
@@ -41,7 +40,7 @@ server = ::Puma::Server.new(app)
 host = opts[:host] || '0.0.0.0'
 port = opts[:port] || 8080
 server.add_tcp_listener host, port
-min_threads, max_threads = 0, 16
+min_threads, max_threads = 4, 16
 server.min_threads = min_threads
 server.max_threads = max_threads
 

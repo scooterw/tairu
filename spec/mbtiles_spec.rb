@@ -5,7 +5,7 @@ describe Tairu::Store::MBTiles do
     Tairu.config = Tairu::Configuration.config_from_file('./spec/data/mbtiles.yaml')
   end
 
-  it "should return valid tile" do
+  it "should return valid tile for coordinate" do
     coord = Tairu::Coordinate.new(0, 0, 0)
     tile = Tairu::Store::MBTiles.get('geo', 'geography-class.mbtiles', coord)
     tile.instance_of?(Tairu::Tile).should eq(true)

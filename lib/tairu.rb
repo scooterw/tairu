@@ -16,26 +16,33 @@ module Tairu
     attr_accessor :logger
     attr_accessor :config
     attr_accessor :cache
+    attr_accessor :tilesets
 
-    def get_tile(name, coord, format = nil)
-      tileset = Tairu.config.layers[name]
+    def config_from_file(file)
+      self.config = Tairu::Configuration.config_from_file(file)
+      #self.cache = self.config.cache
 
-      unless tileset.nil?
-        tile = Tairu.cache.get(tileset, coord)
+      self.tilesets = {}
+      
+      self.config.layers.each do |k,v|
+        self.tilesets[k] = Tairu::Store::TYPES[v['provider'].downcase].new(k)
+      end
+    end
 
-        if tile.nil?
-          provider = Tairu::Store::TYPES[tileset['provider']]
-          provider_tile = provider.get(name, tileset['tileset'], coord, tileset['format'])
+    def get_tile(name, coord, format=nil)
+      tileset = Tairu.tilesets[name]
 
-          unless provider_tile.nil?
-            tile = provider_tile
-            Tairu.cache.add(tileset, coord, tile)
-          else
-            tile = TILE_404
-          end
+      return TILE_404 if tileset.nil?
+
+      tile = Tairu.cache.get(name, coord)
+
+      if tile.nil?
+        tile = tileset.get(coord, Tairu.config.layers[name]['format'])
+        unless tile.nil?
+          Tairu.cache.add(name, coord, tile)
+        else
+          tile = TILE_404
         end
-      else
-        tile = TILE_404
       end
 
       tile

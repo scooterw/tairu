@@ -1,11 +1,11 @@
 module Tairu
   module Cache
     class Memory
-      def initialize(options = nil)
+      def initialize(options=nil)
         @tiles = {}
       end
 
-      def add(layer, coord, tile, age = 300) # format?
+      def add(layer, coord, tile, age=300) # format?
         key = Tairu::Cache::Key.new(layer, coord)
         expire = Time.now + age
         @tiles[key] = {tile: tile, expire: expire}
