@@ -43,12 +43,13 @@ module Tairu
         expire = Time.now + @expire
         base_path = File.join(File.expand_path(@path), name, "#{coord.zoom}", "#{coord.column}")
         FileUtils.mkdir_p(base_path)
-        path = File.join(base_path, "#{coord.row}.#{layer['format']}")
+        path = File.join(base_path, "#{coord.row}.#{Tairu.config.layers[name]['format']}")
         lock_write(path, tile.data)
-        purge_expired(layer)
+        purge_expired(name)
       end
 
       def get(name, coord)
+        layer = Tairu.config.layers[name]
         path = File.join(File.expand_path(@path), name, "#{coord.zoom}", "#{coord.column}", "#{coord.row}.#{layer['format']}")
         data = lock_read(path)
         
@@ -57,10 +58,11 @@ module Tairu
         Tairu::Tile.new(data, layer['format'])
       end
 
-      def purge_expired(layer)
-        Dir.glob(File.join(File.expand_path(@path), "**/*.#{layer['format']}")).each do |f|
+      def purge_expired(name)
+        Dir.glob(File.join(File.expand_path(@path), "**/*.#{Tairu.config.layers[name]['format']}")).each do |f|
           FileUtils.rm(f) if File.mtime(f) < (Time.now - @expire)
         end
+        Dir[File.join(File.expand_path(@path), '**/*')].select {|d| File.directory?(d)}.select {|d| (Dir.entries(d) - %w[. ..]).empty?}.each {|d| Dir.rmdir(d)}
       end
     end
   end

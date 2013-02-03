@@ -44,10 +44,14 @@ module Tairu
         utf_grid
       end
 
+      def get_legend
+        @db[:metadata].where(name: 'legend').first
+      end
+
       def info
         info = {}
 
-        %w{name type version description format bounds}.each do |key|
+        %w{name type version description format bounds attribution minzoom maxzoom template legend}.each do |key|
           value = @db[:metadata].where(name: key).first
           info[key] = value[:value] unless value.nil?
         end

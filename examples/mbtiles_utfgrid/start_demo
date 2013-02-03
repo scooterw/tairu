@@ -1,3 +1,2 @@
 #!/bin/sh
-
-ruby ../demo.rb -c ./mbtiles.yaml
+../../bin/tairu -c ./mbtiles.yml

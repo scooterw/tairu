@@ -10,11 +10,6 @@ opts = {}
 OptionParser.new do |o|
   o.banner = 'Usage: tairu.rb [options]'
 
-  o.on('', '', '') do
-    puts o.banner
-    exit(0)
-  end
-
   o.on('-v', '--version', '') do
     unless defined?(Tairu)
       require File.join(File.expand_path(File.dirname(__FILE__)), '..', 'lib', 'tairu', 'version')
