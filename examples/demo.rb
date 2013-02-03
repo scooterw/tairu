@@ -8,7 +8,7 @@ require 'puma/server'
 opts = {}
 
 OptionParser.new do |o|
-  o.banner = 'Usage: tairu.rb [options]'
+  o.banner = 'Usage: demo.rb [options]'
 
   o.on('-c', '--config CONFIG', '') do |config|
     opts[:config] = File.expand_path(config)

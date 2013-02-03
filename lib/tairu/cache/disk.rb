@@ -3,11 +3,10 @@ require 'fileutils'
 module Tairu
   module Cache
     class Disk
-      def initialize(options = {})
+      def initialize(options={})
         raise "No path specified." unless options['path']
         @path = options['path']
         @expire = options['expire'] || 300
-        @tiles = {}
       end
 
       def lock_write(path, data)
@@ -40,19 +39,17 @@ module Tairu
         data
       end
 
-      def add(layer, coord, tile)
+      def add(name, coord, tile)
         expire = Time.now + @expire
-        tileset = layer['tileset']
-        base_path = File.join(File.expand_path(@path), tileset, "#{coord.zoom}", "#{coord.column}")
+        base_path = File.join(File.expand_path(@path), name, "#{coord.zoom}", "#{coord.column}")
         FileUtils.mkdir_p(base_path)
         path = File.join(base_path, "#{coord.row}.#{layer['format']}")
         lock_write(path, tile.data)
         purge_expired(layer)
       end
 
-      def get(layer, coord)
-        tileset = layer['tileset']
-        path = File.join(File.expand_path(@path), tileset, "#{coord.zoom}", "#{coord.column}", "#{coord.row}.#{layer['format']}")
+      def get(name, coord)
+        path = File.join(File.expand_path(@path), name, "#{coord.zoom}", "#{coord.column}", "#{coord.row}.#{layer['format']}")
         data = lock_read(path)
         
         return nil if data.nil?

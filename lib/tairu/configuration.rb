@@ -4,7 +4,7 @@ module Tairu
   class Configuration
     attr_accessor :layers, :cache, :name
 
-    def initialize(layers, cache, name = nil)
+    def initialize(layers, cache, name=nil)
       @layers = layers
       @cache = cache
       @name = name
@@ -43,7 +43,7 @@ module Tairu
       config
     end
 
-    def self.start_cache(cache_type = nil, options = nil)
+    def self.start_cache(cache_type=nil, options=nil)
       if cache_type
         cache = Tairu::Cache::TYPES[cache_type].new(options)
       else

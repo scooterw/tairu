@@ -6,6 +6,7 @@ require 'store'
 require 'coordinate'
 require 'tile'
 require 'configuration'
+require 'version'
 
 module Tairu
   extend self
@@ -20,7 +21,6 @@ module Tairu
 
     def config_from_file(file)
       self.config = Tairu::Configuration.config_from_file(file)
-      #self.cache = self.config.cache
 
       self.tilesets = {}
       

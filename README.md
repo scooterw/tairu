@@ -22,7 +22,7 @@ layers:
 
 Tairu relies on a valid configuration object assigned to `Tairu.config`
 
-This may be read from a yaml file (see example above) using `Tairu::Configuration.config_from_file(file_name)`
+This may be read from a yaml file (see example above) using `Tairu.config_from_file(file_name)`
 
 or by assigning default values for layers, cache, and name (optional):
 
@@ -42,5 +42,7 @@ cache = Tairu::Configuration.start_cache('memory', {})
 name = 'tairu_config_example'
 
 Tairu.config = Tairu::Configuration.new(layers, cache, name)
+
+Tairu.cache = Tairu.config.cache
 
 ```
