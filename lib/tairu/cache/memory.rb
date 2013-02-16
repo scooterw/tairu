@@ -5,15 +5,15 @@ module Tairu
         @tiles = {}
       end
 
-      def add(layer, coord, tile, age=300) # format?
-        key = Tairu::Cache::Key.new(layer, coord)
+      def add(name, coord, tile, age=300)
+        key = Tairu::Cache::Key.new(name, coord)
         expire = Time.now + age
         @tiles[key] = {tile: tile, expire: expire}
         :purge_expired
       end
 
-      def get(layer, coord) # format?
-        key = Tairu::Cache::Key.new(layer, coord)
+      def get(name, coord)
+        key = Tairu::Cache::Key.new(name, coord)
         tile = @tiles[key]
 
         return nil if tile.nil?

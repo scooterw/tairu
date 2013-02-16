@@ -23,7 +23,7 @@ module Tairu
       self.config = Tairu::Configuration.config_from_file(file)
 
       self.tilesets = {}
-      
+
       self.config.layers.each do |k,v|
         self.tilesets[k] = Tairu::Store::TYPES[v['provider'].downcase].new(k)
       end

@@ -10,6 +10,10 @@ module Tairu
         @db = Sequel.connect(conn, max_connections: 1)
       end
 
+      def flip_y(zoom, y)
+        (2 ** zoom - 1) - y
+      end
+
       def get(coord, format=nil)
         formats = {
           'png' => 'image/png',
@@ -18,25 +22,21 @@ module Tairu
 
         format = @db[:metadata].select(:value).where(name: 'format').first
         mime_type = format.nil? ? formats['png'] : formats[format[:value]]
-        
-        tile_row = (2 ** coord.zoom - 1) - coord.row
-        tile = @db[:tiles].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
-        
+
+        tile = @db[:tiles].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: flip_y(coord.zoom, coord.row))
+
         tile_data = tile.first.nil? ? nil : Tairu::Tile.new(tile.first[:tile_data], mime_type)
         tile_data
       end
 
       def get_grid(coord)
-        tile_row = (2 ** coord.zoom - 1) - coord.row
-        grid = @db[:grids].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
+        grid = @db[:grids].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: flip_y(coord.zoom, coord.row))
 
-        grid_buf = inflate(grid.first[:grid])
-
-        utf_grid = JSON.parse(grid_buf)
+        utf_grid = JSON.parse(inflate(grid.first[:grid]))
         utf_grid[:data] = {}
 
         grid_data = @db[:grid_data].where(zoom_level: coord.zoom, tile_column: coord.column, tile_row: tile_row)
-        
+
         grid_data.each do |gd|
           utf_grid[:data][gd[:key_name]] = JSON.parse(gd[:key_json])
         end
