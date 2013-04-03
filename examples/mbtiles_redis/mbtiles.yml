@@ -1,0 +1,13 @@
+name: mbtiles_redis_demo
+cache:
+  type: redis
+  options:
+    host: localhost
+    port: 6379
+    db: 0
+layers:
+  geo:
+    provider: mbtiles
+    tileset: geography-class.mbtiles
+    location: ~/.tairu/tilesets
+    format: 'png'

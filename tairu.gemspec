@@ -24,6 +24,9 @@ Gem::Specification.new do |gem|
   gem.executables = ['tairu']
 
   gem.add_runtime_dependency 'sequel'
+  gem.add_runtime_dependency 'redis'
+  gem.add_runtime_dependency 'connection_pool'
+  gem.add_runtime_dependency 'multi_json'
   gem.add_runtime_dependency 'sinatra'
   gem.add_runtime_dependency 'puma'
 
