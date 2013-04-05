@@ -2,12 +2,11 @@ tairu ... simple map tile server
 
 In development mode (irb): `rake console`
 
-To run: `tairu -c /path/to/config/file`
+To run from bin: `tairu --config /path/to/config/file`
 
 Example config file:
 
 ```ruby
-
 name: tairu_config_example
 cache:
   type: memory
@@ -17,17 +16,12 @@ layers:
     tileset: geography-class.mbtiles
     location: ~/.tairu/tilesets
     format: png
-
 ```
 
-Tairu relies on a valid configuration object assigned to `Tairu.config`
-
-This may be read from a yaml file (see example above) using `Tairu.config_from_file(file_name)`
-
-or by assigning default values for layers, cache, and name (optional):
+Configuration may be read from a yaml file (see example above) using `Tairu.config_from_file(file_name)`
+or by passing values for layers, cache, and name (optional) into a configuration block:
 
 ```ruby
-
 layers = {
   'geo' => {
     'provider' => 'mbtiles',
@@ -37,12 +31,20 @@ layers = {
   }
 }
 
-cache = Tairu::Configuration.start_cache('memory', {})
+cache = {
+  'type' => 'redis',
+  'options' => {
+    'host' => 'localhost',
+    'port' => '6379',
+    'db' => 0
+  }
+}
 
-name = 'tairu_config_example'
-
-Tairu.config = Tairu::Configuration.new(layers, cache, name)
-
-Tairu.cache = Tairu.config.cache
-
+Tairu.configure do |config|
+  config.name = 'tairu_config_example'
+  config.layers = layers
+  config.cache = cache
+end
 ```
+
+NOTE: If no cache is passed in, it will default to the memory cache

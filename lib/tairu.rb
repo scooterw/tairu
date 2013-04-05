@@ -11,6 +11,7 @@ require 'version'
 
 module Tairu
   extend self
+  extend Configuration
 
   TILE_404 = Tairu::Tile.new('', 'image/png')
 
@@ -19,16 +20,6 @@ module Tairu
     attr_accessor :config
     attr_accessor :cache
     attr_accessor :tilesets
-
-    def config_from_file(file)
-      self.config = Tairu::Configuration.config_from_file(file)
-
-      self.tilesets = {}
-
-      self.config.layers.each do |k,v|
-        self.tilesets[k] = Tairu::Store::TYPES[v['provider'].downcase].new(k)
-      end
-    end
 
     def get_tile(name, coord, format=nil)
       tileset = Tairu.tilesets[name]

@@ -13,11 +13,11 @@ module Tairu
     end
 
     get '/:tileset/:zoom/:col/:row.grid.json' do
-      status 404 unless Tairu.config.layers[params[:tileset]]['provider'] == 'mbtiles'
+      status 404 unless Tairu.layers[params[:tileset]]['provider'] == 'mbtiles'
 
       tileset = Tairu.tilesets[params[:tileset]]
       status 404 if tileset.nil?
-      
+
       coord = Tairu::Coordinate.new(Integer(params[:row]), Integer(params[:col]), Integer(params[:zoom]))
       tile = tileset.get_grid(coord)
 

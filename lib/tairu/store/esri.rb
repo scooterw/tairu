@@ -2,7 +2,7 @@ module Tairu
   module Store
     class Esri
       def initialize(layer)
-        @tileset = File.join(File.expand_path(Tairu.config.layers[layer]['location']), Tairu.config.layers[layer]['tileset'])
+        @tileset = File.join(File.expand_path(Tairu.layers[layer]['location']), Tairu.layers[layer]['tileset'])
       end
 
       def get(coord, format='png')
