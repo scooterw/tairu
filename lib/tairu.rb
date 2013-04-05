@@ -17,9 +17,6 @@ module Tairu
 
   class << self
     attr_accessor :logger
-    attr_accessor :config
-    attr_accessor :cache
-    attr_accessor :tilesets
 
     def get_tile(name, coord, format=nil)
       tileset = Tairu.tilesets[name]
@@ -29,7 +26,7 @@ module Tairu
       tile = Tairu.cache.get(name, coord)
 
       if tile.nil?
-        tile = tileset.get(coord, Tairu.config.layers[name]['format'])
+        tile = tileset.get(coord, Tairu.layers[name]['format'])
         unless tile.nil?
           Tairu.cache.add(name, coord, tile)
         else
