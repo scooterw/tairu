@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.platform = Gem::Platform::RUBY
   #gem.extensions = Dir['ext/**/*']
   gem.description = 'Simple Tile Server for Ruby'
-  gem.summary = 'Simple Tile Server for Ruby'
+  gem.summary = 'Simple Tile Server (MBTiles, TMS, Esri) for Ruby'
   gem.licenses = ['BSD']
 
   gem.authors = ['Scooter Wadsworth']
