@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/scooterw/tairu.png?branch=master)](https://travis-ci.org/scooterw/tairu)
+
 tairu ... simple map tile server
 
 In development mode (irb): `rake console`
