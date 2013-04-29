@@ -3,3 +3,4 @@
 Gemfile.lock
 .rbenv-version
 .DS_Store
+*.swp

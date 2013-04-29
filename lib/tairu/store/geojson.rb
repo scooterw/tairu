@@ -27,7 +27,7 @@ module Tairu
         end
 
         mime_type = 'application/json'
-        tile = data.nil? nil : Tairu::Tile.new(data, mime_type)
+        tile = data.nil? ? nil : Tairu::Tile.new(data, mime_type)
         tile
       end
     end
