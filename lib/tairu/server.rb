@@ -32,7 +32,7 @@ module Tairu
       end
     end
 
-    get '/:tileset/:zoom/:col/:row' do
+    get '/:tileset/:zoom/:col/:row.?:format' do
       coord = Tairu::Coordinate.new(Integer(params[:row]), Integer(params[:col]), Integer(params[:zoom]))
       tile = Tairu.get_tile(params[:tileset], coord)
 

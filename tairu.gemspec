@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'connection_pool', '1.0.0'
   gem.add_runtime_dependency 'multi_json', '1.7.2'
   gem.add_runtime_dependency 'sinatra', '1.4.2'
-  gem.add_runtime_dependency 'puma', '1.6.3'
+  gem.add_runtime_dependency 'puma', '>= 1.6.3'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
