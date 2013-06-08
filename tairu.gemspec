@@ -23,12 +23,12 @@ Gem::Specification.new do |gem|
   gem.bindir = 'bin'
   gem.executables = ['tairu']
 
-  gem.add_runtime_dependency 'sequel', '3.46.0'
-  gem.add_runtime_dependency 'redis', '3.0.3'
-  gem.add_runtime_dependency 'connection_pool', '1.0.0'
-  gem.add_runtime_dependency 'multi_json', '1.7.2'
-  gem.add_runtime_dependency 'sinatra', '1.4.2'
-  gem.add_runtime_dependency 'puma', '>= 1.6.3'
+  gem.add_runtime_dependency 'sequel', '>= 3.48.0'
+  gem.add_runtime_dependency 'redis', '>= 3.0.4'
+  gem.add_runtime_dependency 'connection_pool', '>= 1.1.0'
+  gem.add_runtime_dependency 'multi_json', '>= 1.7.6'
+  gem.add_runtime_dependency 'sinatra', '>= 1.4.3'
+  gem.add_runtime_dependency 'puma', '>= 2.0.1'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
