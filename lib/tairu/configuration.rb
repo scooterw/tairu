@@ -28,6 +28,17 @@ module Tairu
       end
     end
 
+    def add_layers(layers={})
+      raise RuntimeError.new('No layers specified') if layers.empty?
+      
+      layers.each do |k,v|
+        unless self.layers.include?(k)
+          self.layers[k] = v
+          self.tilesets[k] = Tairu::Store::TYPES[v['provider'].downcase].new(k)
+        end
+      end
+    end
+
     def configure_layers
       raise RuntimeError.new('At least one layer must be specified') unless self.layers
     end
