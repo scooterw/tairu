@@ -1,8 +1,6 @@
 require 'connection_pool'
 require 'redis'
 require 'base64'
-gem 'json', '1.7.7'
-require 'json'
 require 'multi_json'
 
 module Tairu
@@ -43,3 +41,4 @@ module Tairu
     end
   end
 end
+
