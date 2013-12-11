@@ -10,3 +10,8 @@ platform :ruby do
   gem 'sqlite3', '>=1.3.7'
 end
 
+platform :rbx do
+  gem 'rubysl'
+  gem 'json'
+end
+
