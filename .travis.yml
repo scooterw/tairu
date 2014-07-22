@@ -5,7 +5,6 @@ rvm:
   - 2.1.0
   - jruby-19mode
   - jruby-head
-  - rbx-2
 jdk:
   - oraclejdk7
   - openjdk7
@@ -16,6 +15,4 @@ matrix:
     - rvm: 2.0.0
       jdk: openjdk7
     - rvm: 2.1.0
-      jdk: openjdk7
-    - rvm: rbx-2
       jdk: openjdk7
