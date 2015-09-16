@@ -1,8 +1,10 @@
+require 'thread_safe'
+
 module Tairu
   module Cache
     class Memory
       def initialize(options=nil)
-        @tiles = {}
+        @tiles = ThreadSafe::Cache.new
       end
 
       def add(name, coord, tile, age=300)
@@ -27,8 +29,15 @@ module Tairu
       end
 
       def purge_expired
-        @tiles.delete_if {|k,v| v[:expire] > Time.now}
+        # @tiles.delete_if {|k,v| v[:expire] > Time.now}
+        # delete_if is not supported in the thread_safe cache
+        @tiles.each_pair do |k,v|
+          if v[:expire] > Time.now
+            @tiles.delete(k)
+          end
+        end
       end
+      
     end
   end
 end

@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'redis', '>= 3.0.4'
   gem.add_runtime_dependency 'connection_pool', '>= 1.1.0'
   gem.add_runtime_dependency 'multi_json', '>= 1.7.6'
+  gem.add_runtime_dependency 'thread_safe', '>= 0.3.5'
   gem.add_runtime_dependency 'sinatra', '>= 1.4.3'
   gem.add_runtime_dependency 'puma', '>= 2.0.1'
 
